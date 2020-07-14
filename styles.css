@@ -1,0 +1,12 @@
+canvas {
+    cursor: crosshair;
+    border: 1px solid #000000;
+}
+#annotation {
+    width: 300px;
+    height: 400px;
+}
+#bbox {
+    width: 300px;
+    height: 20px;
+}
