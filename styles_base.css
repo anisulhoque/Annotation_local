@@ -1,0 +1,84 @@
+body {
+  font-family: "Lato", sans-serif;
+}
+.topnav {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 160;
+  background-color: #111;
+  overflow-x: hidden;
+}
+.topnav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+}
+.topnav a:hover {
+  color: #f1f1f1;
+}
+.topnav input {
+  padding: 0px 0px 0px 0px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  width: 3em;
+}
+.topnav select {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  width: 3em;
+}
+.vr {
+  border-left: 4px solid #bbb;
+  border-right: 4px solid #bbb;
+  width: 8px;
+  height: 20px;
+  border-radius: 1px;
+  display: inline-block;
+}
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+.sidenav hr {
+  border-top: 4px solid #bbb;
+  border-bottom: 4px solid #bbb;
+  border-radius: 1px;
+  height: 4px;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  margin-top: 50px; /* Same as the width of the topnav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+

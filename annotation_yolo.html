@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles_base.css"></link>
+<link rel="stylesheet" href="styles_yolo.css"></link>
+<script src="js_yolo.js"></script>
+</head>
+<body onload="init()">
+
+<div class="sidenav">
+  <a>Images</a>
+  <input
+    id="inputFiles"
+    type="file"
+    accept="image/*|.jpg|.jpeg|.png"
+    onchange="inputFilesChange(event)"
+    webkitdirectory
+    multiple />
+  <a>Objects</a>
+  <input
+    id="inputTexts"
+    type="file"
+    accept="text/*"
+    onchange="inputTextsChange(event)"/>
+  <hr>
+  <a>Annotation</a>
+  <input
+    id="buttonSaveText"
+    type="button"
+    onclick="buttonSaveText(event)"
+    value="Save File"/>
+</div>
+
+<div class="topnav">
+  <a onclick="selectImagesPrev(event)" >&larr;</a>
+  <select
+    id="selectImages"
+    onchange="selectImagesChange(event)" ></select>
+  <a onclick="selectImagesNext(event)" >&rarr;</a>
+  <div class="vr"> </div>
+  <a onclick="selectObjectsPrev(event)" >&larr;</a>
+  <select
+    id="selectObjects" ></select>
+  <a onclick="selectObjectsNext(event)" >&rarr;</a>
+</div>
+
+<div class="main">
+  <canvas
+    id="canvas"
+    width="800px"
+    height="800px" ></canvas>
+
+  <textarea id="textHidden" width="800px" rows="5" style="display: none" ></textarea>
+  <a id="aHiddenA" style="display: none" ></a>
+</div>
+</body>
+</html> 
+
