@@ -1,42 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <title>Annotation for YoLo</title>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="js.js"></script>
-  <link rel="stylesheet" href="styles.css"></link>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles.css"></link>
+<!-- script src="jsyolo.js"></script -->
+<script src="js.js"></script>
 </head>
+<body onload="init()">
 
-<body>
-  <div>
-	<label for="imageFile">画像</label>
-    <input type='file' id='imageFile' accept='image/*' onchange='openImage(event)'/>
-	<label for="objectFile">オブジェクト</label>
-	<input type='file' id='objectFile'　accept='text/*' onchange='openObject(event)'/>
-	<label for="objects">オブジェクト選択</label>
-    <select name="objects" id="objects" onchange='selectObject()'/>
-	<input type="button" id="save" onclick='saveFile()' value="ファイルに保存"/>
-	<label for="save">Annotation</label>
+<div class="sidenav">
+  <a href="#image">Image</a>
+  <input type="file" id="imageFile" accept="image/*" onchange="openImage(event)" />
+  <a href="#object">Object</a>
+  <input type="file" id="objectFile"　accept="text/*" onchange="openObject(event)"/>
+  <a href="#save">Annotation</a>
+  <input type="button" id="saveAnnotation" onclick='saveAnnotation()' value="Save File"/>
+  <a href="#save">ROI</a>
+  <input type="button" id="SaveROI" onclick='saveImage()' value="Save Image"/>
+</div>
+
+<div class="main">
+  <div class="topnav">
+    <select name="types" id="types" ></select>
+    <a href="#left">&larr;</a>
+    <a href="#filename">File name</a>
+    <a href="#right">&rarr;</a>
+    <select name="objects" id="objects" ></select>
+    <a href="#x">X</a>
+    <input id="x" type="number" maxlength="3" size="3" onchange="changeDim(event)" />
+    <a href="#y">Y</a>
+    <input id="y" type="number" maxlength="3" size="3" onchange="changeDim(event)" />
+    <a href="#dim">ROI</a>
+    <input id="dim" type="number" maxlength="3" size="3" onchange="changeDim(event)" />
   </div>
   <div>
-    <canvas id="canvas" width="800px" height="500px"></canvas>
-	<textarea id="annotation" placeholder="Annotation..."></textarea>
+	<canvas id="canvas" width="800px" height="800px" ></canvas>
   </div>
   <div>
-	<textarea id="bbox" placeholder="Bounded rect..."></textarea>
-	<label for="types">種類</label>
-    <select name="types" id="types" onchange='selectType()'>
-      <option value="yolo">YoLo</option>
-      <option value="polygon">Polygon</option>
-	</select>
-	<br><br>
+    <textarea id="annotation" width="800px" rows="5" placeholder="Annotation..."></textarea>
+    <a id="a" style="display: none" ></a>
+    <a id="b" style="display: none" ></a>
+	<canvas id="cc" width="400px" height="400px" style="display: none" ></canvas>
+    <textarea id="adjust" width="800px" rows="5" ></textarea>
   </div>
+</div>
 </body>
-<script type="text/javascript">
-	(function() {
-		init();
-	})();
-</script>
-</html>
+</html> 
+
