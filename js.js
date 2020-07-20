@@ -8,40 +8,64 @@ var isStart = false;
 var tempLength;
 var xVerteces = [];
 var yVerteces = [];
+var cImage;
+// Elements
+var mCanvas;
+var mContext;
+var dim;
+var leftX;
+var topY;
+var cc;
+var mCc;
+var annotation;
+var adjust;
+var objects;
+var a;
+var b;
+
 
 function changeDim() {
-	drawImage();
+	mContext.clearRect(0, 0, mCanvas.width, mCanvas.height);
+	mContext.beginPath();
+	if (roiImage) {
+		drawImage();
+	}
 	drawROI();
 }
 
 function drawROI() {
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext('2d');
-	ctx.strokeStyle = '#ff0000';
-	ctx.beginPath();
-	var dim = document.getElementById("dim");
-	stX = (canvas.width - dim.value) / 2;
-	stY = (canvas.height - dim.value) / 2;
-	ctx.strokeRect(stX, stY, dim.value, dim.value);
+	mContext.strokeStyle = '#ff0000';
+	stX = (mCanvas.width - dim.value) / 2;
+	stY = (mCanvas.height - dim.value) / 2;
+	mContext.strokeRect(stX, stY, dim.value, dim.value);
 }
 
 function drawImage() {
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext('2d');
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	var left = document.getElementById("x");
-	var top = document.getElementById("y");
-	// ctx.drawImage(roiImage, left.value, top.value,  roiWidth, roiHeight);
 	sx = 0;
 	sy = 0;
 	swidth = roiImage.width;
 	sheight = roiImage.height;
-	x = left.value;
-	y = top.value;
+	x = leftX.value;
+	y = topY.value;
 	width = roiWidth;
 	height = roiHeight;
-	ctx.drawImage(roiImage, sx, sy, swidth, sheight, x, y, width, height);
-	ctx.beginPath();
+	mContext.drawImage(roiImage, sx, sy, swidth, sheight, x, y, width, height);
+
+	mCc.canvas.width = dim.value;
+	mCc.canvas.height = dim.value;
+	var img = new Image;
+	img.src = mCanvas.toDataURL("image/png");
+	img.onload = function() {
+		sx = (img.width - dim.value) / 2;
+		sy = (img.height - dim.value) / 2;
+		swidth = dim.value;
+		sheight = dim.value;
+		x = 0;
+		y = 0;
+		width = dim.value;
+		height = dim.value;
+		mCc.drawImage(img, sx, sy, swidth, sheight, x, y, width, height);
+	};
 }
 
 function initDoc() {
@@ -51,18 +75,12 @@ function initDoc() {
 	isStart = false;
 	roiFile = "";
 
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext('2d');
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	mContext.clearRect(0, 0, mCanvas.width, mCanvas.height);
 
-	var cc = document.getElementById("cc");
-	var ctx = cc.getContext('2d');
-	ctx.clearRect(0, 0, cc.width, cc.height);
+	mCc.clearRect(0, 0, cc.width, cc.height);
 
-	var annotation = document.getElementById("annotation");
 	annotation.value = "";
 
-	var adjust = document.getElementById("adjust");
 	adjust.value = "";
 }
 
@@ -77,23 +95,21 @@ function openImage(file) {
 			// initDrawing();
 			initDoc();
 			aspect = img.height / img.width;
-			roiWidth = canvas.width;
-			roiHeight = canvas.height;
+			roiWidth = mCanvas.width;
+			roiHeight = mCanvas.height;
 			roiImage = img;
-			if (aspect > 1.0 && img.height > canvas.height) {
+			if (aspect > 1.0 && img.height > mCanvas.height) {
 				// Portrait
-				roiWidth = (canvas.height / img.height) * img.width;
-			} else if (aspect < 1.0 && img.width > canvas.width) {
+				roiWidth = (mCanvas.height / img.height) * img.width;
+			} else if (aspect < 1.0 && img.width > mCanvas.width) {
 				// Landscape
-				roiHeight = (canvas.width / img.width) * img.height;
+				roiHeight = (mCanvas.width / img.width) * img.height;
 			} else {
 				roiWidth = img.width;
 				roiHeight = img.height;
 			}
-			var left = document.getElementById("x");
-			left.value = (canvas.width - roiWidth) / 2;
-			var top = document.getElementById("y");
-			top.value = (canvas.height - roiHeight) / 2;
+			leftX.value = (mCanvas.width - roiWidth) / 2;
+			topY.value = (mCanvas.height - roiHeight) / 2;
 			changeDim();
 			var res = input.files[0].name.split(".");
 			roiFile = res[0];
@@ -105,17 +121,15 @@ function openImage(file) {
 }
 
 function removeObjects() {
-	var x = document.getElementById("objects");
-	for (i = x.length - 1; i >= 0; i--) {
-		x.remove(i);
+	for (i = objects.length - 1; i >= 0; i--) {
+		objects.remove(i);
 	}
 }
 
 function addObject(item) {
-	var x = document.getElementById("objects");
 	var option = document.createElement("option");
 	option.text = item;
-	x.add(option);
+	objects.add(option);
 }
 
 function parseObjects(text) {
@@ -143,9 +157,7 @@ function openObject(file) {
 }
 
 function saveAnnotation() {
-	var adjust = document.getElementById("adjust");
 	data = adjust.value;
-    var a = document.getElementById("a");
 
     var json = JSON.stringify(data),
         blob = new Blob([data], {type: "text/plain;charset=utf-8"}),
@@ -157,42 +169,19 @@ function saveAnnotation() {
 }
 
 function saveImage() {
-    var b = document.getElementById("b");
-	var canvas = document.getElementById("canvas");
-	var cc = document.getElementById("cc");
-	var ctx = cc.getContext('2d');
-	var dim = document.getElementById("dim");
-	ctx.canvas.width = dim.value;
-	ctx.canvas.height = dim.value;
-	var img = new Image;
-	img.src = canvas.toDataURL("image/png");
-	img.onload = function() {
-		sx = (img.width - dim.value) / 2;
-		sy = (img.height - dim.value) / 2;
-		swidth = dim.value;
-		sheight = dim.value;
-		x = 0;
-		y = 0;
-		width = dim.value;
-		height = dim.value;
-		ctx.drawImage(img, sx, sy, swidth, sheight, x, y, width, height);
-
-		cc.toBlob(function(blob) {
-			b.href = window.URL.createObjectURL(blob);
-			b.download = roiFile + ".png";
-			b.click();
-			window.URL.revokeObjectURL(b.href);
-		},'image/png');
-	};
+	cc.toBlob(function(blob) {
+		b.href = window.URL.createObjectURL(blob);
+		b.download = roiFile + ".png";
+		b.click();
+		window.URL.revokeObjectURL(b.href);
+	},'image/png');
 }
 
-function adjust() {
-	var dim = document.getElementById("dim");
+function adjustAnnotation() {
 	val = parseInt(dim.value);
-	stX = parseInt((canvas.width - val)) / 2;
-	stY = parseInt((canvas.height - val)) / 2;
-	var obj = document.getElementById("objects");
-	var index = obj.selectedIndex;
+	stX = parseInt((mCanvas.width - val)) / 2;
+	stY = parseInt((mCanvas.height - val)) / 2;
+	var index = objects.selectedIndex;
 	if (index < 0) {
 		index = 0;
 	}
@@ -216,17 +205,15 @@ function adjust() {
 		}
 		vertices += tempX + " " + tempY + " ";
 	}
-	var adjustElem = document.getElementById("adjust");
 	var adjustText = index
 			+ " "
 			+ vertices
 			+ "\n";
-	adjustElem.value += adjustText;
+	adjust.value += adjustText;
 }
 
 function annotate() {
-	var obj = document.getElementById("objects");
-	var index = obj.selectedIndex;
+	var index = objects.selectedIndex;
 	if (index < 0) {
 		index = 0;
 	}
@@ -239,7 +226,6 @@ function annotate() {
 	y1 = Math.min.apply(null, yVerteces.slice(0, tempLength));
 	width = Math.max.apply(null, xVerteces.slice(0, tempLength)) - x1;
 	height = Math.max.apply(null, yVerteces.slice(0, tempLength)) - y1;
-	var annElem = document.getElementById("annotation");
 	var annText = index
 			+ " "
 			+ x1
@@ -252,17 +238,15 @@ function annotate() {
 			+ " "
 			+ vertices
 			+ "\n";
-	annElem.value += annText;
+	annotation.value += annText;
 }
 
 function mouseup(e) {
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext('2d');
 	var rect = e.target.getBoundingClientRect();
 	x = e.clientX - rect.left;
 	y = e.clientY - rect.top;
 	if(e.which == 1) {
-		ctx.fillRect(x, y, 2, 2);
+		mContext.fillRect(x, y, 2, 2);
 		if (!isStart) {
 			isStart = true;
 			tempLength = 0;
@@ -273,9 +257,9 @@ function mouseup(e) {
 			start.x = x;
 			start.y = y;
 		} else {
-			ctx.moveTo(prev.x, prev.y);
-			ctx.lineTo(x, y);
-			ctx.stroke();
+			mContext.moveTo(prev.x, prev.y);
+			mContext.lineTo(x, y);
+			mContext.stroke();
 		}
 		prev.x = x;
 		prev.y = y;
@@ -284,16 +268,16 @@ function mouseup(e) {
 		tempLength++;
 	} else if(e.which == 3) {
 		isStart = false;
-		ctx.moveTo(start.x, start.y);
-		ctx.lineTo(prev.x, prev.y);
-		ctx.stroke();
+		mContext.moveTo(start.x, start.y);
+		mContext.lineTo(prev.x, prev.y);
+		mContext.stroke();
 		x1 = Math.min.apply(null, xVerteces.slice(0, tempLength));
 		y1 = Math.min.apply(null, yVerteces.slice(0, tempLength));
 		width = Math.max.apply(null, xVerteces.slice(0, tempLength)) - x1;
 		height = Math.max.apply(null, yVerteces.slice(0, tempLength)) - y1;
-		ctx.strokeRect(x1, y1, width, height);
+		mContext.strokeRect(x1, y1, width, height);
 		annotate();
-		adjust();
+		adjustAnnotation();
 	}
 }
 
@@ -318,17 +302,27 @@ function init() {
 	option.text = "BBox (N/A)";
 	x.add(option);
 
-	var canvas = document.getElementById("canvas");
-	var dim = document.getElementById("dim");
+    a = document.getElementById("a");
+    b = document.getElementById("b");
+	objects = document.getElementById("objects");
+	annotation = document.getElementById("annotation");
+	adjust = document.getElementById("adjust");
+	cc = document.getElementById("cc");
+	mCc = cc.getContext('2d');
+	leftX = document.getElementById("x");
+	topY = document.getElementById("y");
+	mCanvas = document.getElementById("canvas");
+	mContext = mCanvas.getContext('2d');
+	dim = document.getElementById("dim");
 	dim.value = 500;
 	drawROI();
 	// initDrawing();
 	// canvas.addEventListener('click', click, false);
 	// canvas.addEventListener('dblclick', dblclick, false);
-	canvas.addEventListener('mouseup', mouseup, false);
-	canvas.addEventListener('mousedown', mousedown, false);
-	canvas.addEventListener('mousemove', mousemove, false);
-	canvas.addEventListener('contextmenu', contextmenu, false);
+	mCanvas.addEventListener('mouseup', mouseup, false);
+	mCanvas.addEventListener('mousedown', mousedown, false);
+	mCanvas.addEventListener('mousemove', mousemove, false);
+	mCanvas.addEventListener('contextmenu', contextmenu, false);
 }
 
 /***
