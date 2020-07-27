@@ -9,8 +9,6 @@ var aHiddenAId;
 
 // Vars
 var imageFiles = [];
-var textFiles = [];
-var names = [];
 
 var mContext;
 var leftMouseStarted = false;
@@ -80,15 +78,6 @@ function fileChange() {
 	};
 
 	reader.readAsDataURL(file);
-	// Load annotation
-	var txtFile = textFiles[selectImagesId.selectedIndex];
-	if (typeof txtFile !== 'undefined') {
-		var txtReader = new FileReader();
-		txtReader.onload = function(e){
-			textHiddenId.value = e.target.result;
-		};
-		txtReader.readAsText(txtFile);
-	}
 }
 
 function annotateYoLo() {
@@ -178,7 +167,7 @@ function buttonSaveText() {
 		return;
 	}
 
-	var file = names[selectImagesId.selectedIndex];
+	var file = imageFiles[selectImagesId.selectedIndex].name.split(".")[0];
 
     var json = JSON.stringify(data),
         blob = new Blob([data], {type: "text/plain;charset=utf-8"}),
@@ -285,15 +274,8 @@ function inputFilesChange(e) {
 			|| fName.endsWith(".png")) {
 			option.text = fName;
 			selectImagesId.add(option);
-			names[j] = fName.split(".")[0];
 			imageFiles[j] = files[i];
 			j++;
-		} else if (fName.endsWith(".txt")) {
-			name = fName.split(".")[0];
-			index = names.indexOf(name);
-			if (index >= 0) {
-				textFiles[index] = files[i];
-			}
 		}
 	};
 	if (imageFiles.length >= 0) {
