@@ -15,6 +15,7 @@ var yVerteces = [];
 var aImageNameId;
 var canvasId;
 var inputDimId;
+var inputZoomId;
 var inputXId;
 var inputYId;
 
@@ -37,8 +38,9 @@ function drawImage() {
 	sheight = roiImage.height;
 	x = inputXId.value;
 	y = inputYId.value;
-	width = roiWidth;
-	height = roiHeight;
+	zoomFactor = inputZoomId.value / 100;
+	width = roiWidth * zoomFactor;
+	height = roiHeight * zoomFactor;
 	mContext.drawImage(roiImage, sx, sy, swidth, sheight, x, y, width, height);
 
 	mCc.canvas.width = inputDimId.value;
@@ -77,7 +79,7 @@ function annotatePolygon() {
 	width = Math.max.apply(null, xVerteces.slice(0, leftMouseCount)) - x1;
 	height = Math.max.apply(null, yVerteces.slice(0, leftMouseCount)) - y1;
 	mContext.strokeRect(x1, y1, width, height);
-
+	
 	val = parseInt(inputDimId.value);
 	stX = parseInt((canvasId.width - val)) / 2;
 	stY = parseInt((canvasId.height - val)) / 2;
@@ -218,6 +220,7 @@ function init() {
 	inputXId = document.getElementById("inputX");
 	inputYId = document.getElementById("inputY");
 	inputDimId = document.getElementById("inputDim");
+	inputZoomId = document.getElementById("inputZoom");
 	canvasId = document.getElementById("canvas");
 
     aHiddenAId = document.getElementById("aHiddenA");
@@ -227,6 +230,7 @@ function init() {
 	mContext = canvasId.getContext('2d');
 	mCc = canvasHiddenId.getContext('2d');
 	inputDimId.value = 500;
+	inputZoomId.value = 100;
 
 	drawROI();
 	// canvas.addEventListener('click', click, false);
