@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles_base.css"></link>
+<link rel="stylesheet" href="styles_polygon.css"></link>
+<script src="js_polygon.js"></script>
+</head>
+<body onload="init()">
+
+<div class="sidenav">
+  <a>Image</a>
+  <input
+    type="file"
+    accept="image/*"
+    onchange="inputFileChange(event.target.files[0])" />
+  <a>Annotation</a>
+  <input
+    type="button"
+    onclick='buttonSaveText()'
+    value="Save File"/>
+  <a>ROI</a>
+  <input
+    type="button"
+    onclick='buttonSaveImage()'
+    value="Save Image"/>
+</div>
+<div class="topnav">
+  <a id="aImageName" >Image Name</a>
+  <a>X</a>
+  <input
+    id="inputX"
+    type="number"
+    maxlength="3"
+    size="3"
+    onchange="inputDimChange(event)" />
+  <a>Y</a>
+  <input
+    id="inputY"
+    type="number"
+    maxlength="3"
+    size="3"
+    onchange="inputDimChange(event)" />
+  <a>ROI</a>
+  <input
+    id="inputDim"
+    type="number"
+    maxlength="3"
+    size="3"
+    onchange="inputDimChange(event)" />
+</div>
+<div class="main">
+  <div>
+	<canvas
+      id="canvas"
+      width="800px"
+      height="800px" ></canvas>
+  </div>
+  <div>
+    <textarea id="textHidden" width="800px" rows="5" style="display: none" ></textarea>
+    <a id="aHiddenA" style="display: none" ></a>
+	<canvas id="canvasHidden" width="400px" height="400px" style="display: none" ></canvas>
+  </div>
+</div>
+</body>
+</html> 
+
