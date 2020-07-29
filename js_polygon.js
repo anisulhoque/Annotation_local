@@ -101,7 +101,8 @@ function annotatePolygon() {
 		} else {
 			tempY = yVerteces[i] - stY;
 		}
-		vertices += tempX + " " + tempY + " ";
+		// (Math.floor(y/x) * x).toFixed(4)
+		vertices += parseInt(tempX) + " " + parseInt(tempY) + " ";
 	}
 	var txt = vertices
 			+ "\n";
