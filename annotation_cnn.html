@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles_cnn.css"></link>
+<script src="js_cnn.js"></script>
+</head>
+<body onload="init()">
+
+<div class="box">
+  <div class="row header">
+    <input
+      type="file"
+      accept="image/*"
+      onchange="inputFileChange(event.target.files[0])" />
+    <input
+      type="button"
+      onclick='buttonSaveText()'
+      value="Save"/>
+    <a id="aImageName" >Image Name</a>
+  </div>
+  <div class="row content">
+	<canvas
+      id="canvas"
+      width="800px"
+      height="480px" />
+  </div>
+  <div class="row footer">
+    <textarea id="textHidden" width="20px" rows="2" style="display: none" ></textarea>
+    <a id="aHiddenA" style="display: none" ></a>
+  </div>
+</div>
+
+  <div>
+  </div>
+  <div>
+  </div>
+</body>
+</html> 
+
