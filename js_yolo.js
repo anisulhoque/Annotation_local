@@ -80,8 +80,12 @@ function fileChange() {
 	reader.readAsDataURL(file);
 }
 
-// Relative BBOX calculation:
-// Ref: https://github.com/pjreddie/darknet
+/*
+ * Relative BBOX calculation:
+ * Ref:
+ * https://github.com/AlexeyAB/Yolo_mark
+ * https://github.com/pjreddie/darknet
+*/
 
 function annotateYoLo() {
 	var index = selectObjectsId.selectedIndex;
