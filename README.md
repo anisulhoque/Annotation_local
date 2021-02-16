@@ -8,6 +8,8 @@ Limitations:
    [JavaScript doesn't support save file from source]
    [In future, Python Script will be added]
 
-All source example is take from W3Schools:
+All source example is take from W3Schools & stackoverflow
 
 https://www.w3schools.com/about/about_copyright.asp
+
+https://stackoverflow.com/
